@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hypodiabetic.pumpdriverexample">
+
+    <application
+        android:name=".MainApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="com.hypodiabetic.happ.Objects.Treatment,
+                            com.hypodiabetic.happ.Objects.Basal"  />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="pumpdriver.db" />
+        <!-- Also up date AA_DB_VERSION in MainActivity onCreate -->
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="2" />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="INSULIN_TREATMENT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".AutoStart" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".IncomingService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":incoming_service_process">
+            <intent-filter>
+                <action android:name="com.hypodiabetic.pumpdriverexample.IncomingService">
+                </action>
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
