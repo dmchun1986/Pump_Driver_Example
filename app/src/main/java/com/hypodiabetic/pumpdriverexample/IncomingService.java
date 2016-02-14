@@ -145,13 +145,22 @@ public class IncomingService extends android.app.Service {
                     treatment.save();
 
                 } else {                                                                            //Pump is online and available to accept a treatment
-                    // TODO: 16/01/2016 a function should be here to action the treatment 
-                    treatment.state         = "delivered";
-                    treatment.details       = "Treatment has been sent to the pump";
-                    treatment.delivered     = true;                                                 // TODO: 16/01/2016 logic should be set to check that the treatment was successfully delivered before setting this to true
-                    treatment.happ_update   = true;
-                    treatment.save();
-
+                    if (treatment.value == 1.1){
+                        // TODO: 14/02/2016 This must be removed in production 
+                        treatment.state         = "error";
+                        treatment.details       = "test error as value = 1.1";
+                        treatment.delivered     = false;
+                        treatment.rejected      = true;
+                        treatment.happ_update   = true;
+                        treatment.save();
+                    } else {
+                        // TODO: 16/01/2016 a function should be here to action the treatment 
+                        treatment.state = "delivered";
+                        treatment.details = "Treatment has been sent to the pump";
+                        treatment.delivered = true;                                                 // TODO: 16/01/2016 logic should be set to check that the treatment was successfully delivered before setting this to true
+                        treatment.happ_update = true;
+                        treatment.save();
+                    }
                 }
             }
         }
