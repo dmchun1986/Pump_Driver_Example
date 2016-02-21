@@ -78,7 +78,14 @@ public class IncomingService extends android.app.Service {
                         basal.been_set      =   false;
                         basal.happ_int_id   =   basalSync.happ_integration_id;
                         basal.auth_code     =   basalSync.integrationSecretCode;
-                        basal.state         =   "received";
+                        if (checkNewObjectToSync(basalSync).equals("")) {
+                            basal.state     =   "received";
+                        } else {
+                            basal.state      =   "error";
+                            basal.details    =   checkNewObjectToSync(basalSync);
+                            basal.rejected   =   true;
+                            basal.happ_update=   true;
+                        }
                         basal.save();
 
                         //We have now saved the requested treatments from HAPP to our local DB, now action them
@@ -100,7 +107,14 @@ public class IncomingService extends android.app.Service {
                                     newTreatment.delivered      =   false;
                                     newTreatment.happ_int_id    =   newBolus.happ_integration_id;
                                     newTreatment.auth_code      =   newBolus.integrationSecretCode;
-                                    newTreatment.state          =   "received";
+                                    if (checkNewObjectToSync(newBolus).equals("")){
+                                        newTreatment.state      =   "received";
+                                    } else {
+                                        newTreatment.state      =   "error";
+                                        newTreatment.details    =   checkNewObjectToSync(newBolus);
+                                        newTreatment.rejected   =   true;
+                                        newTreatment.happ_update=   true;
+                                    }
                                     newTreatment.save();
 
                                 } catch (Exception e) {
@@ -117,6 +131,24 @@ public class IncomingService extends android.app.Service {
                 }
             }
         }
+    }
+
+    public String checkNewObjectToSync(ObjectToSync objectToSync){
+        // TODO: 21/02/2016 this function checks that we are happy to accept this new object
+
+        //Do we support the pump requested? For this example app, we support all pumps
+        switch (objectToSync.value4){
+            case "roche_combo":
+            case "dana_r":
+            case "medtronic_absolute":
+            case "medtronic_percent":
+                return "";
+            default:
+                return "Pump requested not supported, treatment rejected.";
+        }
+
+        // TODO: 21/02/2016 perform other checks here, return empty string for OK all text detailing the issue
+
     }
 
     public void actionTreatments(){

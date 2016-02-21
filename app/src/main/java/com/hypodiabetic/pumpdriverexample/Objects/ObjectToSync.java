@@ -22,6 +22,7 @@ public class ObjectToSync {
     public Double   value1;                     //Bolus Amount / Temp Basal Rate
     public String   value2;                     //bolusType (Standard / Square Wave) / Basal %
     public String   value3;                     //Bolus Type (Bolus / Correction) / Temp Basal Duration
+    public String   value4;                     //Pump
     public Date     requested;                  //Date requested
 
 
